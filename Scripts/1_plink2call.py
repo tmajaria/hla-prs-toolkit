@@ -5,11 +5,12 @@
 """ plink2call.py
 
 	Usage:
-		plink2call.py --bfile <bfile> --mapping <mapping>
+		plink2call.py --bfile <bfile> --mapping <mapping> --plink <plink>
 
 	Options:
 		--bfile	: Show this help message
 		--mapping	: Training feature set
+		--plink	: location of plink executable
 
 """	
 from docopt import docopt
@@ -25,9 +26,10 @@ import os
 def main(docopt_args):
 	bfile=docopt_args["<bfile>"]
 	mapping=docopt_args["<mapping>"]
+	plink=docopt_args["<plink>"]
 
 	#PLINK Location
-	plink="/gpfs/mrc0/projects/Research_Project-MRC158833/programs/plink/plink --silent"
+	#plink="/gpfs/mrc0/projects/Research_Project-MRC158833/programs/plink/plink --silent"
 
 	#Generate frequencies
 	print("Generating frequencies with PLINK...")
