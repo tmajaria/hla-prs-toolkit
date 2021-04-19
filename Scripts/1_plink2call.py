@@ -1,6 +1,7 @@
 #####################################################################
 ##  plink2call - PLINK hard genotypes to HLA allele calls
 #####################################################################
+## Modified by TDM Apr. 19 2021
 
 """ plink2call.py
 
@@ -10,7 +11,7 @@
 	Options:
 		--bfile	: Show this help message
 		--mapping	: Training feature set
-		--plink	: location of plink executable
+		--plink	: location of plink executable (Tim local: /Users/tmajaria/Documents/src/plink/plink_mac_20190617/plink)
 
 """	
 from docopt import docopt
