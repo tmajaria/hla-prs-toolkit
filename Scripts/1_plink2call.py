@@ -6,7 +6,7 @@
 """ plink2call.py
 
 	Usage:
-		plink2call.py (--vcf | --bfile) <file> --mapping <mapping> --plink <plink> [--out_dir <out_dir>]
+		plink2call.py (--vcf | --bfile) <file> --mapping <mapping> (--plink | --plink2) <plink> [--out_dir <out_dir>]
 
 	Options:
 		--bfile	: plink file set input
@@ -46,10 +46,18 @@ def main(docopt_args):
 	else:
 		file_pref=os.path.join(out_dir, os.path.basename(file).replace(".vcf", "").replace(".gz", ""))
 		command=plink+" --vcf "+file+" --freq --out "+file_pref
-		
+	
+	# All output files
+	if docopt_args['--plink']:
+		freq_file = file_pref+".frq"
+		ma_cols = ["SNP","A1"]
+	else:
+		freq_file = file_pref+".afreq"
+		ma_cols = ["ID","ALT"]
+
 	subprocess.run(command,shell=True)
-	freq=pd.read_csv(file_pref+".frq",header=0, delim_whitespace=True)
-	ma=freq[["SNP","A1"]]
+	freq=pd.read_csv(freq_file,header=0, delim_whitespace=True)
+	ma=freq[ma_cols]
 
 	#Append MAF and tagged allele to SNP matrix
 	print("Matching SNP allele to HLA allele...")
@@ -80,7 +88,7 @@ def main(docopt_args):
 		if i>0:
 			table_hla[allele]=temp['SCORE']
 	#Clean up and out
-	command="rm "+file+".log "+file+".frq "+file+".nosex "+tmp+" 2> /dev/null"
+	# command="rm "+file_pref+".log "+file_pref+".frq "+file_pref+".nosex "+tmp+" 2> /dev/null"
 	subprocess.run(command,shell=True)
 	command="rm plink.profile plink.log plink.nosex 2> /dev/null"
 	subprocess.run(command,shell=True)
