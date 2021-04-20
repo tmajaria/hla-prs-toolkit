@@ -6,13 +6,14 @@
 """ plink2call.py
 
 	Usage:
-		plink2call.py (--vcf | --bfile) <file> --mapping <mapping> --plink <plink>
+		plink2call.py (--vcf | --bfile) <file> --mapping <mapping> --plink <plink> [--out_dir <out_dir>]
 
 	Options:
 		--bfile	: plink file set input
 		--vcf	: vcf input
 		--mapping	: Training feature set
 		--plink	: location of plink executable (Tim local: /Users/tmajaria/Documents/src/plink/plink_mac_20190617/plink)
+		--out_dir	: optional location to write files
 
 """	
 from docopt import docopt
@@ -29,6 +30,10 @@ def main(docopt_args):
 	mapping=docopt_args["<mapping>"]
 	plink=docopt_args["<plink>"]
 	file=docopt_args['<file>']
+	if docopt_args['--out_dir']:
+		out_dir = docopt_args['<out_dir>']
+	else:
+		out_dir = os.path.dirname(file)
 
 	#PLINK Location
 	#plink="/gpfs/mrc0/projects/Research_Project-MRC158833/programs/plink/plink --silent"
@@ -36,10 +41,10 @@ def main(docopt_args):
 	#Generate frequencies
 	print("Generating frequencies with PLINK...")
 	if docopt_args['--bfile']:
-		command=plink+" --bfile "+file+" --freq --out "+file
-		file_pref=file
+		file_pref=os.path.join(out_dir, os.path.basename(file))
+		command=plink+" --bfile "+file+" --freq --out "+file_pref
 	else:
-		file_pref=file.replace(".vcf", "").replace(".gz", "")
+		file_pref=os.path.join(out_dir, os.path.basename(file).replace(".vcf", "").replace(".gz", ""))
 		command=plink+" --vcf "+file+" --freq --out "+file_pref
 		
 	subprocess.run(command,shell=True)

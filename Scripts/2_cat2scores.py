@@ -5,11 +5,12 @@
 """ cat2scores.py
 
 	Usage:
-		cat2scores.py --cat <catfile> --score <scorefile>
+		cat2scores.py --cat <catfile> --score <scorefile> [--out_dir <out_dir>]
 
 	Options:
 		--cat	: Show this help message
 		--score	: Training feature set
+		--out_dir	: optional location to write files
 
 """	
 from docopt import docopt
@@ -18,6 +19,7 @@ import pandas as pd
 import numpy as np
 import subprocess
 import sys
+import os
 
 #####################################################################
 ##  Main
@@ -25,6 +27,10 @@ import sys
 def main(docopt_args):
 	catfile=docopt_args["<catfile>"]
 	scorefile=docopt_args["<scorefile>"]
+	if docopt_args['--out_dir']:
+		out_dir=docopt_args['<out_dir>']
+	else:
+		out_dir = os.path.dirname(catfile)
 	prefix1=str(re.sub('(.txt)','',catfile)).split('/')[-1]
 	prefix2=str(re.sub('(.txt)','',scorefile)).split('/')[-1]
 
@@ -59,7 +65,7 @@ def main(docopt_args):
 	else:
 		print("None detected - skipping...")
 
-	score_out.to_csv(prefix1+"_Scored.txt", header=True, index=False, sep="\t")
+	score_out.to_csv(os.path.join(out_dir, prefix1+"_Scored.txt"), header=True, index=False, sep="\t")
 	print("Success! Created "+prefix1+"_Scored.txt")
 	print("Finished.")
 
