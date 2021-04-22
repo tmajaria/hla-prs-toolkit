@@ -13,7 +13,7 @@
 	  --vcf <file>
 	  --mapping <mapping>
 	  --plink=<plink> [default: plink]
-	  --out_dir <out_dir> 
+	  --out_dir=<out_dir> [default: ./]
 
 """	
 from docopt import docopt
