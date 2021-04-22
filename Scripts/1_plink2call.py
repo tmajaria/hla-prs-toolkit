@@ -35,6 +35,9 @@ def main(docopt_args):
 	else:
 		out_dir = os.path.dirname(file)
 
+	# load SNPS
+	tags=pd.read_csv(mapping, header=0, sep="\s+|\t+|\s+\t+|\t+\s+", engine='python')
+
 	#PLINK Location
 	#plink="/gpfs/mrc0/projects/Research_Project-MRC158833/programs/plink/plink --silent"
 
@@ -42,11 +45,16 @@ def main(docopt_args):
 	print("Generating frequencies with PLINK...")
 	if docopt_args['--bfile']:
 		file_pref=os.path.join(out_dir, os.path.basename(file))
-		command=plink+" --bfile "+file+" --freq --out "+file_pref
-	else:
-		file_pref=os.path.join(out_dir, os.path.basename(file).replace(".vcf", "").replace(".gz", ""))
-		command=plink+" --vcf "+file+" --freq --out "+file_pref
 		
+	else:
+		file_pref=os.path.join(out_dir, os.path.basename(file).replace(".vcf", "").replace(".gz", ""))+'_filtered'
+		snpout_file = file_pref + '_snplist.txt'
+		with open(snpout_file, 'w') as f: f.writelines("%s\n" % snp for snp in list(tags['SNP']))
+		filter_command=plink+" --vcf "+file+" --extract "+snpout_file+" --make-bed --out "+file_pref
+		subprocess.run(filter_command,shell=True)
+		file=file_pref
+	
+	command=plink+" --bfile "+file+" --freq --out "+file_pref
 	subprocess.run(command,shell=True)
 	freq=pd.read_csv(file_pref+".frq",header=0, delim_whitespace=True)
 	ma=freq[["SNP","A1"]]
@@ -63,10 +71,7 @@ def main(docopt_args):
 		scorefile=vmap[['SNP','A1']]
 		scorefile['VAL']=1
 		scorefile.iloc[[i]].to_csv(tmp,header=False, index=False, sep="\t")
-		if docopt_args['--bfile']:
-			command=plink+" --bfile "+file+" --score "+tmp+" no-mean-imputation"
-		else:
-			command=plink+" --vcf "+file+" --score "+tmp+" no-mean-imputation"
+		command=plink+" --bfile "+file+" --score "+tmp+" no-mean-imputation"
 		subprocess.run(command,shell=True)
 		temp=pd.read_csv("plink.profile",header=0, sep="\s+|\t+|\s+\t+|\t+\s+", 
 									engine='python')
