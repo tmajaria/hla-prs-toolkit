@@ -6,14 +6,14 @@
 """ plink2call.py
 
 	Usage:
-		plink2call.py (--vcf | --bfile) <file> --mapping <mapping> --plink <plink> [--out_dir <out_dir>]
+		plink2call (--vcf | --bfile) <file> --mapping=<mapping> [--plink=<plink>] [--out_dir=<out_dir>]
 
 	Options:
-		--bfile	: plink file set input
-		--vcf	: vcf input
-		--mapping	: Training feature set
-		--plink	: location of plink executable (Tim local: /Users/tmajaria/Documents/src/plink/plink_mac_20190617/plink)
-		--out_dir	: optional location to write files
+	  --bfile <file>
+	  --vcf <file>
+	  --mapping <mapping>
+	  --plink=<plink> [default: plink]
+	  --out_dir <out_dir> 
 
 """	
 from docopt import docopt
@@ -27,13 +27,11 @@ import os
 ##  Main
 #####################################################################
 def main(docopt_args):
-	mapping=docopt_args["<mapping>"]
-	plink=docopt_args["<plink>"]
+	print(docopt_args)
+	mapping=docopt_args["--mapping"]
 	file=docopt_args['<file>']
-	if docopt_args['--out_dir']:
-		out_dir = docopt_args['<out_dir>']
-	else:
-		out_dir = os.path.dirname(file)
+	plink = docopt_args['--plink'] if docopt_args['--plink'] else 'plink'
+	out_dir = docopt_args['--out_dir'] if docopt_args['--out_dir'] else os.path.dirname(file)
 
 	# load SNPS
 	tags=pd.read_csv(mapping, header=0, sep="\s+|\t+|\s+\t+|\t+\s+", engine='python')
