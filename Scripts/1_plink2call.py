@@ -1,7 +1,7 @@
 #####################################################################
 ##  plink2call - PLINK hard genotypes to HLA allele calls
 #####################################################################
-## Modified by TDM Apr. 19 2021
+## Modified by TDM Apr. 22 2021
 
 """ plink2call.py
 
@@ -27,7 +27,6 @@ import os
 ##  Main
 #####################################################################
 def main(docopt_args):
-	print(docopt_args)
 	mapping=docopt_args["--mapping"]
 	file=docopt_args['<file>']
 	plink = docopt_args['--plink'] if docopt_args['--plink'] else 'plink'
@@ -87,8 +86,8 @@ def main(docopt_args):
 	subprocess.run(command,shell=True)
 	command="rm plink.profile plink.log plink.nosex 2> /dev/null"
 	subprocess.run(command,shell=True)
-	#table_hla.to_csv(bfile+"_dosage_anot.txt", header=True, index=False, sep="\t")
-	#print("Success! Created "+bfile+"_dosage_anot.txt")
+	table_hla.to_csv(file_pref+"_dosage_anot.txt", header=True, index=False, sep="\t")
+	print("Success! Created "+file_pref+"_dosage_anot.txt")
 
 	#Sum rows and check
 	print("Checking row sums for excess alleles...")
