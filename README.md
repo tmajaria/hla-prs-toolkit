@@ -1,5 +1,19 @@
 # Polygenic Risk Score (PRS) Toolkit for HLA
 
+Modified By [Tim Majarian](tmajaria@broadinstitute.org)
+
+Changes:  
+  - support for VCF input  
+  - Plink path can be specified from command line
+  - Output directory can be specified from command line
+  - Proxy variant for rs17843689 (failed TOPMed QC, not present in TOPMed imputed datasets)  
+
+In development:  
+  - support for Plink 2.0  
+  - BGEN input  
+  - Scripts for full GRS67 (non-hla haplotype scoring)  
+  - Additional proxies for all variants in GRS67  
+
 #### Please note the terms Polygenic Risk Score (PRS) and Genetic Risk Score (GRS) are used interchangeably.
 
 This toolkit contains a collection of scripts for generating Single Nucleotide Polymorphism (SNP) based Polygenic Risk Scores (PRS) for common polygenic disease / traits where Human Leukocyte Antigen (HLA) region epistasis (gene vs gene interaction) is modelled using SNPs in strong Linkage Disequilbrium with alleles.
