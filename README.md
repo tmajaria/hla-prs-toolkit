@@ -7,12 +7,12 @@ Changes:
   - Plink path can be specified from command line
   - Output directory can be specified from command line
   - Proxy variant for rs17843689 (failed TOPMed QC, not present in TOPMed imputed datasets)  
+  - Addition of score file for non-hla haplotype scoring, with proxies for datasets imputed with TOPMed  
 
 In development:  
   - support for Plink 2.0  
   - BGEN input  
   - Scripts for full GRS67 (non-hla haplotype scoring)  
-  - Additional proxies for all variants in GRS67  
 
 #### Please note the terms Polygenic Risk Score (PRS) and Genetic Risk Score (GRS) are used interchangeably.
 
